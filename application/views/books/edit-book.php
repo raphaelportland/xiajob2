@@ -2,23 +2,6 @@
 
 <?php
 
-$book_name = array(
-    'name' => 'book_name',
-    'id'    => 'book_name',
-    'value' => set_value('book_name',$book->name),
-    'placeholder' => 'Mon Book',
-    'class' => 'input-xlarge',
-    'maxlength' => 150,
-    'size'  => 150,
-);
-
-$description = array(
-    'name' => 'description',
-    'id'    => 'description',
-    'value' => set_value('description',$book->description),
-    'placeholder' => 'La description de votre book',
-);
-
 echo form_open();
 
 ?>
