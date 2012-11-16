@@ -98,7 +98,7 @@ data-logged_in="<?= $logged_in; ?>"
 data-title="Book favori" 
 data-action="<?= site_url('social/add_fav'); ?>"
 class="book-social-fav btn btn-large btn-inverse">
-<?php if($is_fav) : ?>
+<?php if(isset($is_fav) && $is_fav == true) : ?>
 <i class="icon-star icon-color"></i>   
 <?php else : ?>
 <i class="icon-star icon-white"></i>

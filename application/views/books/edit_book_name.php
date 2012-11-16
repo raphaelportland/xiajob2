@@ -1,9 +1,17 @@
 <?php
 
+if(isset($book->name)) {
+    $original_book_name = $book->name;    
+} else {
+    $original_book_name = '';
+}
+
+
+
 $book_name = array(
     'name' => 'value',
     'id'    => 'book_name',
-    'value' => set_value('book_name',$book->name),
+    'value' => set_value('book_name',$original_book_name),
     'placeholder' => 'Mon Book',
     'class' => 'input-xlarge autosubmit',
     'maxlength' => 150,

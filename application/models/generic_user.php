@@ -218,7 +218,9 @@ class Generic_user extends Users {
             if($q->num_rows() > 0) :
                 $this->load->model('books','book_model');
                 foreach ($q->result() as $key => $book) {
-                    $this->books[] = $this->book_model->get_book_by_id($book->id);
+                    //code($book);
+                    //$this->books[] = $this->book_model->get_book_by_id($book->id);
+                    $this->books[] = $book;
                 }
             else :
                 $this->books = null; 

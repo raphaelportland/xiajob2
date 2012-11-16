@@ -284,7 +284,8 @@ class Book extends CI_Controller
             redirect('book/my_books');
         } else {
                         
-            $data['book'] = $this->books->get_book_by_id($book_id);                   
+            $data['book'] = $this->books->get_book_by_id($book_id);         
+                      
             $this->load->view('books/edit_book_name',$data);
         }
     }   

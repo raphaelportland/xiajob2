@@ -1,9 +1,16 @@
 <?php
 
+if(isset($book->description)) {
+    $original_book_description = $book->description;    
+} else {
+    $original_book_description = '';
+}
+
+
 $description = array(
     'name' => 'value',
     'id'    => 'description',
-    'value' => set_value('description',$book->description),
+    'value' => set_value('description',$original_book_description),
     'placeholder' => 'La description de votre book',
     'rows' => '4',
     'cols' => '140',

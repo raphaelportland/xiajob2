@@ -47,7 +47,7 @@ class Candidat extends Generic_user {
            $this->set_id($user_id);
        }     
        
-       $this->get_user();       
+       $this->get_user();    // generic_user   
        $this->get_awards();       
        $this->get_diplomas();       
        $this->get_xppro();      

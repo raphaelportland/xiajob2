@@ -538,7 +538,7 @@ class Books extends CI_Model {
      */    
     function get_book_by_id($book_id, $comments = false) {
        $q = $this->db
-            ->select('*, occasions.id as id_occasion, user_book.id as book_id')
+            ->select('*, occasions.id as id_occasion, user_book.id as book_id, user_book.name as book_name')
             ->from('user_book')
             ->join('occasions', 'occasions.id = user_book.id_occasion')
             ->where('user_book.id', $book_id)
@@ -549,18 +549,20 @@ class Books extends CI_Model {
        }
        
        $this_book = new stdClass();
+       $this_book->occasion = new stdClass();
        
        $book = $q->row();  
        
-       code($book);
+       //code($book);
        
        $this_book->id = $book->book_id;
-       unset($book->book_id);
-       
+       unset($book->book_id);       
        $this_book->occasion->name = $book->occasion_name;
        unset($book->occasion_name);
        $this_book->occasion->id = $book->id_occasion;
        unset($book->id_occasion);
+       
+       $this_book->name = $book->name;
        
        // les informations sur le propriétaire
        $this->get_owner_by_id($book->user_id);
@@ -569,7 +571,7 @@ class Books extends CI_Model {
        // les photos
        $this_book->pictures = $this->get_pictures($book_id, $comments);      
        
-       return $book;
+       return $this_book;
     }
 
 
@@ -671,7 +673,7 @@ class Books extends CI_Model {
        $pictures = new stdClass();
        
        if(!$q->num_rows() > 0) {
-           $pictures->nb = 'aucune';
+           $pictures->nb = 0;
        } else {
            $pictures->nb = $q->num_rows();           
        }

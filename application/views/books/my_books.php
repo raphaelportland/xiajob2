@@ -20,7 +20,14 @@
         
 <?php foreach ($books as $key => $book) {
     
-    $nb = $book->pictures->nb;   
+    if(isset($book->pictures->nb)) {
+        $nb = $book->pictures->nb;    
+    } else {
+        $nb = 0;
+    }
+    
+    //code($book);
+       
     echo("<tr>
     <th><div id='book_name_$key'>");
     if(!$book->name) $book->name = 'cliquez ici pour ajouter un nom';
