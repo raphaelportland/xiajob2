@@ -20,9 +20,20 @@
             <div class='book-content'>
                 <p class='lead'><?= $name; ?></p>
                 <p><?= $description; ?></p>
-                <span class="label label-info"><?= $occasion->name; ?></span>
+                <span class="label label-info">
+<?php
+    if(isset($occasion->name)) {
+        echo $occasion->name;
+    } elseif(isset($occasion_name)) {
+        echo $occasion_name;
+    } else {
+        echo "erreur : pas d'occasion indiquée";
+    }
+ 
+?>
+                    </span>
                 
-                <?php if(isset($context)) : ?> 
+                <?php if(isset($context)) : ?>
                     <br /><br />             
                 <?php switch($context) :
 

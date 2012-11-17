@@ -18,7 +18,7 @@ class Fleurjob extends CI_Controller
         if (!$this->tank_auth->is_logged_in()) {  // si l'utilisateur n'est pas loggué                  
             $data['view'] = 'candidat/home';
         
-            $this->load->view('candidat/templates/public',$data);
+            $this->load->view('common/templates/main',$data);
                             
         } else { // s'il est loggué
             $this->load->model('generic_user');
@@ -47,7 +47,7 @@ class Fleurjob extends CI_Controller
         
         $data['user'] = $this->candidat;     
         $data['view'] = "candidat/dashboard";
-        $this->load->view("candidat/templates/private",$data);
+        $this->load->view("common/templates/main",$data);
     }       
 
 
@@ -114,7 +114,7 @@ class Fleurjob extends CI_Controller
         $data['rubrique'] = $rubrique;       
         $data['view'] = "candidat/profile/profile"; // mini-template pour les différents onglets du profil
         
-        $this->load->view("candidat/templates/private",$data);
+        $this->load->view("common/templates/main",$data);
     }
 
 
@@ -234,7 +234,7 @@ class Fleurjob extends CI_Controller
             $this->load->view('candidat/elmt/'.$type.'-edit',$data);            
         } else {        
             $data['view'] = 'candidat/elmt/'.$type.'-edit';        
-            $this->load->view('candidat/templates/private',$data);            
+            $this->load->view('common/templates/main',$data);            
         }
     } 
 
@@ -246,7 +246,7 @@ class Fleurjob extends CI_Controller
      */
     function unregister() {
        $data['view'] = 'candidat/unregister';
-       $this->load->view('candidat/templates/private', $data);
+       $this->load->view('common/templates/main', $data);
     }
     
     function unregister_confirm() {        

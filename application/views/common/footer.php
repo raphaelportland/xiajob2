@@ -1,5 +1,5 @@
         <div id="footer" class='row-fluid'>
-            <span>FlorBook &copy; 2012</span>
+            <span>florBooks &copy; 2012</span>
         </div>
 
 

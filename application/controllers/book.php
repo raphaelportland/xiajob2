@@ -15,15 +15,12 @@ class Book extends CI_Controller
         
         $this->load->model('books');
         $this->books->get_featured_books(4);
-        $this->books->get_recent(8);      
-
-        $this->load->model('liste');
-        
+        $this->books->get_recent(8);
+                
         $data['books'] = $this->books->books;
-        $data['occasions'] = $this->liste->occasions();
         
-        
-        $this->load->view('books/gallery',$data);
+        $data['view'] = 'books/gallery';      
+        $this->load->view('common/templates/main',$data);
        
     }
     
@@ -58,8 +55,6 @@ class Book extends CI_Controller
         $this->load->model('books');      
         $data = $this->books->get_book_by_id($book_id, true);
 
-        //stop_code($data);
-
             $this->load->library('tank_auth');
 
             if($this->tank_auth->is_logged_in()) { // l'utilisateur est loggué
@@ -83,8 +78,6 @@ class Book extends CI_Controller
                     $data->viewer_is_owner = false;
                     $data->viewer_is_logged_in = false;
             }
-            
-            //code($data);
 
             $this->load->view('books/templates/book_tpl',$data);
     }   
@@ -120,7 +113,7 @@ class Book extends CI_Controller
         $data['view'] = "books/my_books"; // mini-template pour les différents onglets du profil
         $data['books'] = $this->candidat->books;
         
-        $this->load->view("candidat/templates/private",$data);              
+        $this->load->view("common/templates/main",$data);              
     }
     
     
@@ -143,7 +136,7 @@ class Book extends CI_Controller
 
         $data['book'] = $this->books->get_book_by_id($id);        
         $data['view'] = 'books/edit-book';       
-        $this->load->view('candidat/templates/private',$data);        
+        $this->load->view('common/templates/main',$data);        
     }
 
 
@@ -211,7 +204,7 @@ class Book extends CI_Controller
         //stop_code($data);
                 
         $data['view'] = 'books/create-book';
-        $this->load->view('candidat/templates/private',$data);        
+        $this->load->view('common/templates/main',$data);        
         
     } 
     
@@ -232,7 +225,7 @@ class Book extends CI_Controller
         $data['book'] = $this->books->get_book_by_id($book_id); 
  
         $data['view'] = 'books/add-pic';
-        $this->load->view('candidat/templates/private',$data);                  
+        $this->load->view('common/templates/main',$data);                  
         
     }
         
@@ -265,7 +258,7 @@ class Book extends CI_Controller
         if($this->input->post('ajax')) {
             $this->load->view($data['view'],$book_data);            
         } else {    
-            $this->load->view('candidat/templates/private',$data);
+            $this->load->view('common/templates/main',$data);
         }
 
     } 
@@ -330,7 +323,7 @@ class Book extends CI_Controller
         //code($data['pic']);
         
         $data['view'] = 'books/add-flowers';
-        $this->load->view('candidat/templates/public',$data);
+        $this->load->view('common/templates/main',$data);
         
     }
     

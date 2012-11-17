@@ -69,9 +69,7 @@ class Books extends CI_Model {
     /**
      * @deprecated
      */ 
-    public $private_key;
-    
-    
+    public $private_key;        
 
 
     // la langue à utiliser, notamment pour les fleurs
@@ -138,24 +136,27 @@ class Books extends CI_Model {
      */
     function get_recent($nb = 'all') {
         
-        $this->db->order_by('id','desc');
+        
+        $this->db->select('*, user_book.id as book_id, occasions.id as occasion_id');
+        $this->db->from('user_book');
+        $this->db->join('occasions', 'occasions.id = user_book.id_occasion');          
+        
+        
+        $this->db->order_by('user_book.id','desc');
                 
         if($nb != 'all') {
             $this->db->limit($nb);
-        }                
+        }
                 
-        $q = $this->db->get('user_book');
-         
-        $result = $q->result();        
-        
-        $this->load->model('liste');
-        $occasions = $this->liste->occasions();        
+        $q = $this->db->get();
+
+        $result = $q->result();
                                
         foreach ($result as $key => $book) {
             
-            $result[$key]->pictures = $this->get_pictures($book->id);
+            $result[$key]->pictures = $this->get_pictures($book->book_id);
             
-        }       
+        }      
         
         $this->books->latest = $result;
         return $this->books->latest;
@@ -551,22 +552,22 @@ class Books extends CI_Model {
        $this_book = new stdClass();
        $this_book->occasion = new stdClass();
        
-       $book = $q->row();  
-       
-       //code($book);
+       $book = $q->row();
        
        $this_book->id = $book->book_id;
-       unset($book->book_id);       
+   
        $this_book->occasion->name = $book->occasion_name;
-       unset($book->occasion_name);
+
        $this_book->occasion->id = $book->id_occasion;
-       unset($book->id_occasion);
        
        $this_book->name = $book->name;
        
+       $this_book->description = $book->description;
+       
+       $this_book->short_url = $book->short_url;
+       
        // les informations sur le propriétaire
        $this->get_owner_by_id($book->user_id);
-       unset($book->user_id);
        
        // les photos
        $this_book->pictures = $this->get_pictures($book_id, $comments);      

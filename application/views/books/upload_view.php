@@ -12,12 +12,12 @@
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-success fileinput-button">
                     <i class="icon-plus icon-white"></i>
-                    <span>Ajouter des photos...</span>
+                    <span>Choisir des photos...</span>
                     <input type="file" name="userfile" multiple>
                 </span>
                 <button type="submit" class="btn start">
                     <i class="icon-upload"></i>
-                    <span>Envoyer toutes les photos</span>
+                    <span>Charger toutes les photos</span>
                 </button>
                 <!--
                 <button type="reset" class="btn btn-warning cancel">
@@ -100,7 +100,7 @@
             <td class="start">{% if (!o.options.autoUpload) { %}
                 <button class="btn btn-primary">
                     <i class="icon-upload icon-white"></i>
-                    <span>Enregistrer</span>
+                    <span>Charger</span>
                 </button>
             {% } %}</td>
         {% } else { %}

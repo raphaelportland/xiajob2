@@ -8,7 +8,8 @@
 <?php $this->load->view('common/head'); ?>
 
 <?php $this->load->view('candidat/elmt/private-head-nav'); ?>        
-        
+
+<!--       
     <header class='subhead'>
         
 <?php //$this->load->view('common/specific-access'); ?>            
@@ -18,7 +19,7 @@
         <p>Révélez vos talents</p>             
         </div>        
     </header>
-
+-->
 
     
 <div class="container-fluid">         

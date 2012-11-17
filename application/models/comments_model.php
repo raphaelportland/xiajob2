@@ -143,6 +143,7 @@ class Comments_model extends CI_Model {
              
             //$comments->comments = $q->result();          
         } else {
+            $comments = new stdClass();
             $comments->comments = null;
         }             
                 

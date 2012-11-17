@@ -6,7 +6,13 @@
                         <div class='featured_th_crop'>
                             
                             
-            <img width='290' height='210' src='<?= base_url().$pictures->pics[1]->th_url; ?>' /> 
+            <img width='290' height='210' src='
+            <?php
+            if(isset($pitures->pics[1]->th_url)) {
+                echo base_url().$pictures->pics[1]->th_url;
+            } else {
+                echo base_url().$pictures->pics[0]->th_url;
+            } ?>' /> 
             
                             
                             

@@ -23,7 +23,7 @@ if($this->session->userdata('user_id')) {
           <div class='container-fluid'>
                <a class='brand'><?= $name; ?></a> 
                 
-                <?php echo anchor('fleurjob','découvrez FlorBook <i class="icon icon-white icon-share-alt"></i>','class="btn btn-primary pull-right"'); ?>
+                <?php echo anchor('fleurjob','découvrez florBooks <i class="icon icon-white icon-share-alt"></i>','class="btn btn-primary pull-right"'); ?>
                 
                 <?php echo anchor('book','Explorer d\'autres Books','class="btn"'); ?>
                 
@@ -32,7 +32,16 @@ if($this->session->userdata('user_id')) {
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">en savoir plus sur ce book...<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                          <li class='book-description'><?= $description; ?></li>
+                          <li class='book-description'>
+                              <?php
+                              
+                              if(isset($description)) {
+                                  echo $description;
+                              } else {
+                                  echo "Aucune description n'a été donnée à ce book.";
+                              }
+                              ?>
+                          </li>
                         </ul>
                       </li>
                 </ul> 
