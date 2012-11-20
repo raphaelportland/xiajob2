@@ -248,6 +248,60 @@ class Generic_user extends Users {
     
     
     /**
+     * Récupère le nom d'usage de l'utilisateur
+     * et le place en session
+     * @return string
+     */
+    function get_username() {
+        
+        if(isset($this->username)) {
+            
+            $this->session->set_userdata('username', $this->username);
+            return $this->username;
+            
+        } else {
+            
+            $q = $this->db->select('prenom, nom, user_data.username, users.email')
+            ->from('user_data')
+            ->join('users', 'users.id = user_data.user_id')
+            ->where('users.id', $this->user_id)
+            ->get();
+            
+            $result = $q->row();
+            
+            if($result->username != '') {
+                $this->username = $result->username;    
+                            
+            } elseif($result->prenom != '' || $result->nom != '') {                
+                $this->username = '';
+                
+                if($result->prenom != '') {                
+                    $this->username = $result->prenom .' ';
+                }
+                
+                if($result->nom != '') {
+                    $this->username .= $result->nom;
+                }
+                
+            } else {                
+                $decoup = explode('@',$result->email);
+                $this->username = $decoup[0];                 
+            }            
+            
+            $this->session->set_userdata('username', $this->username);
+            
+            //stop_code($this->session->userdata('username'));                        
+        }
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    /**
      * Vérifie si l'email est dans la table users
      * 
      */
@@ -279,7 +333,7 @@ class Generic_user extends Users {
             // on met l'utilisateur en session
             $this->session->set_userdata(array(
                     'user_id'   => $user_id,
-                    'username'  => '',
+                    'username'  => $this->get_username(),
                     'status'    => '1',
             )); 
             
