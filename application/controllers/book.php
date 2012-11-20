@@ -102,15 +102,14 @@ class Book extends CI_Controller
      */
     function my_books() {
         $this->load->model('candidat');
-        $this->candidat->login_test('candidat'); // vérifie si l'utilisateur est connecté et le boule s'il ne l'est pas.        
-        
+        $this->candidat->login_test('candidat'); // vérifie si l'utilisateur est connecté et le boule s'il ne l'est pas.         
         
         $this->candidat->get_user();
         
         // si pas de book créé, on l'envoie en créer un
         if($this->candidat->books == false) { redirect('book/create_book'); } 
         
-        $data['view'] = "books/my_books"; // mini-template pour les différents onglets du profil
+        $data['view'] = "books/my_books";
         $data['books'] = $this->candidat->books;
         
         $this->load->view("common/templates/main",$data);              

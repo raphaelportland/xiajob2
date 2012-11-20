@@ -217,14 +217,18 @@ class Generic_user extends Users {
      */
     function get_all_user_books($user_id) {
             $q = $this->db
+                    ->select('user_book.id, user_book.name, user_book.description, user_book.short_url, 
+                    occasions.occasion_name, count(fj_book_pics.id) as pic_nb')
                     ->where('user_id', $user_id)
-                    ->get('user_book');
+                    ->from('user_book')
+                    ->join('book_pics','book_pics.book_id = user_book.id')
+                    ->join('occasions','occasions.id = user_book.id_occasion')
+                    ->get();
                     
             if($q->num_rows() > 0) :
                 $this->load->model('books','book_model');
                 foreach ($q->result() as $key => $book) {
-                    //code($book);
-                    //$this->books[] = $this->book_model->get_book_by_id($book->id);
+                    
                     $this->books[] = $book;
                 }
             else :
