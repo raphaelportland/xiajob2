@@ -9,7 +9,7 @@
 
 
 
-<?php echo anchor('fleurjob/unregister_confirm', 'Oui, je confirme ma désinscription.','class="btn btn-large btn-danger"'); ?>
+<?php echo anchor('register/unregister_confirm', 'Oui, je confirme ma désinscription.','class="btn btn-large btn-danger"'); ?>
 
 
 <?php echo anchor('fleurjob', 'Non, je veux conserver mes informations', 'class="btn btn-large"');

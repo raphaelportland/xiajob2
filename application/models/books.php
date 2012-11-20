@@ -705,12 +705,38 @@ class Books extends CI_Model {
     
     /**
      * Supprime le book et toutes les photos associées
-     * et les commentaires ! A FAIRE ! XXX
+     * et les commentaires !
      * 
      */
-    function delete($id) {       
-        $this->db->delete('user_book', array('id' => $id));            
-        $this->db->delete('book_pics', array('book_id' => $id));       
+    function delete($id) {
+        // on récupère les photos pour les effacer du disque
+        $q = $this->db->select('id, pic_url, th_url')
+        ->from('book_pics')
+        ->where('book_id', $id)
+        ->get();
+        
+        if($q->num_rows() > 0) :
+            foreach ($q->result() as $key => $pic) {
+                
+                // on efface les photos du disque (principale et thumbnail)
+                unlink($pic->pic_url);
+                unlink($pic->th_url);
+                
+                // on efface les commentaires sur la photo
+                $this->db->delete('comments',array('pic_id' => $pic->id));
+                
+                // on supprime les associations de fleurs
+                $this->db->delete('pic_flowers', array('pic_id' => $pic->id));
+                $this->db->delete('user_flowers', array('pic_id' => $pic->id));   
+                
+            }
+        endif;     
+        
+        // on supprime les photos de la base de données
+        $this->db->delete('book_pics', array('book_id' => $id));  
+        
+        // on supprime le book de la base de données   
+        $this->db->delete('user_book', array('id' => $id));     
     }
     
     
@@ -728,20 +754,6 @@ class Books extends CI_Model {
      */
     function update($source) {
         
-        /*
-        $book = array(
-        'user_id' => $this->owner,
-        'name' => $source['name'],
-        'description' => $source['description'],
-        'order' => $source['order'],        
-        );
-         
-        
-        $this->db
-            ->where('id',$source['id'])
-            ->update('user_book',$book);
-        */
-        
         $i = 0;
         while(isset($source['pic_name'.$i])) :
             
@@ -757,9 +769,7 @@ class Books extends CI_Model {
             $i++;
             
         endwhile;
-
-        
-        
+   
     }
     
     
@@ -810,33 +820,6 @@ class Books extends CI_Model {
        
     }
     
-    
-    
-    
-    /**
-     * Vérifie que la clé et l'id du book sont bien conforme
-     * si c'est le cas, renvoie le book entier
-     * 
-     */
-    function check_private_key($book_id,$private_key) {
-        
-        $q = $this->db
-                ->where('id',$book_id)
-                ->where('private_key',$private_key)
-                ->get('user_book');
-                
-        if($q->num_rows() > 0) {
-            // ok
-            $this->set_owner($q->row()->user_id);
-            $this->load($book_id);
-            
-            return($this->books);
-            
-        } else {
-            return null;
-        }
-        
-    }
     
     
     /**
@@ -893,7 +876,13 @@ class Books extends CI_Model {
      * 
      */
     function delete_pic($id) {
-        $return_book = $this->parent_book($id);                
+        $pic = $this->get_picture_urls($id);
+        $return_book = $pic->book_id;
+        // on supprime la photo du disque
+        unlink($pic->pic_url);
+        unlink($pic->th_url);
+         
+        // on supprime la photo de la base de données            
         $this->db->delete('book_pics', array('id' => $id));       
         
         // on supprime les associations de fleurs
@@ -905,8 +894,46 @@ class Books extends CI_Model {
     
     
     
+    /**
+     * Renvoie les url de l'image et de sa miniature
+     * pour une image donnée
+     * @param int $pic_id
+     * @return object;
+     */
+    function get_picture_urls($pic_id) {
+        // on récupère les photos pour les effacer du disque
+        $q = $this->db->select('id, pic_url, th_url, book_id')
+        ->from('book_pics')
+        ->where('id', $pic_id)
+        ->get();
+        
+        if($q->num_rows() > 0) {
+            return $q->row();
+        } else {
+            return null;
+        }
+        
+    }
     
-    
+    /**
+     * Renvoie les urls des images et des miniatures
+     * pour un book donné
+     * @param int $book_id
+     * @return object
+     */
+    function get_book_pictures_urls($book_id) {
+        // on récupère les photos pour les effacer du disque
+        $q = $this->db->select('id, pic_url, th_url')
+        ->from('book_pics')
+        ->where('book_id', $book_id)
+        ->get();
+        
+        if($q->num_rows() > 0) {
+            return $q->result();
+        } else {
+            return null;
+        }
+    }    
     
     
     
@@ -924,6 +951,6 @@ class Books extends CI_Model {
         $this->db->update($post['table'], $data); 
         
     }
-    
+
     
 }

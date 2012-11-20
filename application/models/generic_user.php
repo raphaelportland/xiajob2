@@ -216,26 +216,30 @@ class Generic_user extends Users {
      * @return object
      */
     function get_all_user_books($user_id) {
-            $q = $this->db
-                    ->select('user_book.id, user_book.name, user_book.description, user_book.short_url, 
-                    occasions.occasion_name, count(fj_book_pics.id) as pic_nb')
-                    ->where('user_id', $user_id)
-                    ->from('user_book')
-                    ->join('book_pics','book_pics.book_id = user_book.id')
-                    ->join('occasions','occasions.id = user_book.id_occasion')
-                    ->get();
-                    
-            if($q->num_rows() > 0) :
+        
+            
+            $q = $this->db->select('id')->from('user_book')->where('user_id', $user_id)->get();
+            if($q->num_rows() == 0) {
+                return null;
+            } else {
+                
+                $q = $this->db
+                ->select('user_book.id, user_book.name, user_book.description, user_book.short_url, 
+                occasions.occasion_name')
+                ->where('user_book.user_id', $user_id)
+                ->select('count(fj_book_pics.id) as pic_nb')
+                ->from('user_book')
+                ->join('book_pics','book_pics.book_id = user_book.id')
+                ->join('occasions','occasions.id = user_book.id_occasion')
+                ->get();                
+            
                 $this->load->model('books','book_model');
                 foreach ($q->result() as $key => $book) {
                     
                     $this->books[] = $book;
+                    return $this->books;
                 }
-            else :
-                $this->books = null; 
-            endif;
-            
-            return $this->books;      
+            }     
     }
     
     
@@ -484,6 +488,7 @@ class Generic_user extends Users {
      * 
      */
     function delete_user() {
+        
         $this->db->delete('users', array('id' => $this->user_id)); 
         $this->db->delete('user_profiles', array('user_id' => $this->user_id));
         $this->db->delete('user_autologin', array('user_id' => $this->user_id));
@@ -497,11 +502,11 @@ class Generic_user extends Users {
         $this->db->delete('user_data', array('user_id' => $this->user_id));
         $this->db->delete('comments',array('user_id' => $this->user_id));
         
-        $this->get_all_user_books($this->user_id);
+        $books = $this->get_all_user_books($this->user_id);
         
-        if(isset($this->books)) {
+        if(isset($books)) {
             $this->load->model('books','books_model');
-            foreach ($this->books as $key => $book) {           
+            foreach ($this->books as $key => $book) {
                 $this->books_model->delete($book->id);
             }              
         }  

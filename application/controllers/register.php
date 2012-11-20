@@ -261,7 +261,27 @@ class Register extends CI_Controller
         }
     }        
     
+
+    /**
+     * Désinscription du site
+     * Supprime toutes les informations sur l'utilisateur
+     * 
+     */
+    function unregister() {
+       $data['view'] = 'candidat/unregister';
+       $this->load->view('common/templates/main', $data);
+    }
     
+    function unregister_confirm() {        
+        $this->load->model('generic_user');
+        $this->generic_user->login_test();
+        $this->generic_user->set_id($this->session->userdata('user_id')); // seul l'utilisateur loggué peut se supprimer
+        $this->generic_user->delete_user();
+        $this->load->library('tank_auth');
+        $this->tank_auth->logout();
+        
+        redirect('fleurjob');
+    }    
     
 }
     
