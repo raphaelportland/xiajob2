@@ -196,6 +196,11 @@ class Generic_user extends Users {
             $basic_info->profile = $user->profile;
             $basic_info->email = $user->email;
             
+            if($this->username == '') {
+                $this->username = $this->get_username();
+                $basic_info->username = $this->username;
+            }
+            
             return $basic_info;
         } else {
             return false;

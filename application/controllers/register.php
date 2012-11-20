@@ -248,8 +248,7 @@ class Register extends CI_Controller
         
         $this->generic_user->get_user();
                        
-        $data['view'] = 'activated';
-        //$data['step'] = $this->generic_user->current_register_step();        
+        $data['view'] = 'activated';      
         $data['step'] = $this->generic_user->options->profile_step;
         
         switch($this->generic_user->profile) {
