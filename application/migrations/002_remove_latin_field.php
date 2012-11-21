@@ -1,6 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
+/**
+ * Met en place la liste définitive des fleurs
+ * 
+ */  
 class Migration_Remove_latin_field extends CI_Migration {
     
     public function up() {
