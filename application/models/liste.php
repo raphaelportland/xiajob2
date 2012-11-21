@@ -2,6 +2,7 @@
 /**
  *  
  *  Permet de récupérer les listes de l'applications
+ *  et éventuellement les mettre en cache 
  * 
  */
 class Liste extends CI_Model {
