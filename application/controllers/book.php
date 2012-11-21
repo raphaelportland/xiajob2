@@ -306,7 +306,9 @@ class Book extends CI_Controller
         //$this->load->model('liste');
         //$data['fleurs'] = $this->liste->flowers();
         
-        $data['fleurs'] = file_get_contents(base_url().'public/flower_list_fr.html');
+        //$data['fleurs'] = file_get_contents(base_url().'public/flower_list_fr.html');
+        $this->load->model('liste');        
+        $data['fleurs'] = $this->liste->flowers('fr');        
         
         $this->load->model('books');
         $this->books->set_lang('fr');
@@ -318,8 +320,6 @@ class Book extends CI_Controller
         }
         
         $data['pic'] = $this->books->get_pic_by_id($pic_id);
-        
-        //code($data['pic']);
         
         $data['view'] = 'books/add-flowers';
         $this->load->view('common/templates/main',$data);

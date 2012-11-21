@@ -390,25 +390,12 @@ class Books extends CI_Model {
     }
     
     
-    function get_flower_by_complete_name($complete_name) {
+    function get_flower_by_complete_name($flower_name) {
         
         // on teste si la fleur existe dans la base officielle
         
-        $temp = explode(' - ',$complete_name);
-        
-        if(isset($temp[1])) :
-            $flower['latin'] = $temp[1];
-            $flower['name_'.$this->lang] = $temp[0];
-        
-        else :
-            
-            $flower['latin'] = '';
-            $flower['name_'.$this->lang] = $complete_name;    
-            
-        endif;
-        
-        $q = $this->db->where('latin', $flower['latin'])
-        ->where('name_'.$this->lang, $flower['name_'.$this->lang])
+        $q = $this->db
+        ->where('name_'.$this->lang, $flower_name)
         ->get('fleurs');
         
         if($q->num_rows() > 0) {
