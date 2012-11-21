@@ -23,7 +23,7 @@ class Liste extends CI_Model {
      */
     function flowers($lang = 'fr') {
         
-        
+        $this->db->cache_on();
         $q = $this->db->select('name_'.$lang)->get('fleurs');
         
         $result = $q->result();
@@ -42,6 +42,8 @@ class Liste extends CI_Model {
                 $fleur_list .= ', ';
             endif; 
         }
+        
+        $this->db->cache_off();
         
         return $fleur_list;
        
