@@ -10,7 +10,7 @@ if($added_flowers) :
     if(isset($added_flowers['official'])) :
     
         foreach ($added_flowers['official'] as $key => $flower) : ?>           
-                <span class="label label-inverse"><?= $flower->name_fr; ?> - <i class='latin_name'><?= $flower->latin; ?></i>
+                <span class="label label-inverse"><?= $flower->name_fr; ?>
                     <?php if(!isset($forbidden_edit)) : ?>
                     <?php echo anchor('book/del_pic_flower/'.$pic_id.'/'.$flower->flower_id,"<i class='icon icon-white icon-remove'></i>"); ?>
                     <?php endif; ?>

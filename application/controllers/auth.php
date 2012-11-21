@@ -75,6 +75,7 @@ class Auth extends CI_Controller
                     $user_id = $this->tank_auth->get_user_id();
                     $this->generic_user->set_id($user_id);
                     $profile = $this->generic_user->profile();
+                    $this->generic_user->get_username();
                     
                     if($profile == 'candidat') : redirect('fleurjob/welcome'); 
                     else : redirect('recruteur/welcome');

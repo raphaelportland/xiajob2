@@ -102,16 +102,15 @@ class Book extends CI_Controller
      */
     function my_books() {
         $this->load->model('candidat');
-        $this->candidat->login_test('candidat'); // vérifie si l'utilisateur est connecté et le boule s'il ne l'est pas.        
-        
-        
-        $this->candidat->get_user();
+        $this->candidat->login_test('candidat'); // vérifie si l'utilisateur est connecté et le boule s'il ne l'est pas.         
+
+        $books = $this->candidat->get_all_user_books($this->session->userdata('user_id'));
         
         // si pas de book créé, on l'envoie en créer un
-        if($this->candidat->books == false) { redirect('book/create_book'); } 
+        if(!isset($books)) { redirect('book/create_book'); } 
         
-        $data['view'] = "books/my_books"; // mini-template pour les différents onglets du profil
-        $data['books'] = $this->candidat->books;
+        $data['view'] = "books/my_books";
+        $data['books'] = $books;
         
         $this->load->view("common/templates/main",$data);              
     }
@@ -307,7 +306,9 @@ class Book extends CI_Controller
         //$this->load->model('liste');
         //$data['fleurs'] = $this->liste->flowers();
         
-        $data['fleurs'] = file_get_contents(base_url().'public/flower_list_fr.html');
+        //$data['fleurs'] = file_get_contents(base_url().'public/flower_list_fr.html');
+        $this->load->model('liste');        
+        $data['fleurs'] = $this->liste->flowers('fr');        
         
         $this->load->model('books');
         $this->books->set_lang('fr');
@@ -319,8 +320,6 @@ class Book extends CI_Controller
         }
         
         $data['pic'] = $this->books->get_pic_by_id($pic_id);
-        
-        //code($data['pic']);
         
         $data['view'] = 'books/add-flowers';
         $this->load->view('common/templates/main',$data);

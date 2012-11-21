@@ -16,15 +16,15 @@
                                 
                 </ul>  
                 
-                   <?php echo anchor('', 'Achat/Vente magasin','class="pull-right btn btn-info"'); ?>                                       
-                   <?php echo anchor('', 'Accès Emploi/Recrutement','class="pull-right btn btn-primary"'); ?>   
+                   <?php echo anchor('pages/coming_soon', 'Achat/Vente magasin','class="pull-right btn btn-info"'); ?>                                       
+                   <?php echo anchor('pages/coming_soon', 'Accès Emploi/Recrutement','class="pull-right btn btn-primary"'); ?>   
                    
                 <ul class="nav pull-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">UserName <b class="caret"></b></a>                        
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello <?= $this->session->userdata('username'); ?> <b class="caret"></b></a>                        
                         <ul class="dropdown-menu">
                             <li><?php echo anchor("fleurjob/edit_profile",'<i class="icon icon-user"></i> Mon profil'); ?></li>
-                            <li><?php echo anchor("auth/logout",'<i class="icon icon-off"></i> Déconnexion','class=""'); ?></li>                          
+                            <li><?php echo anchor("auth/logout",'<i class="icon icon-off"></i> Déconnexion'); ?></li>                          
                         </ul>
                      </li>
                 </ul>                   

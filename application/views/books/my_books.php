@@ -20,13 +20,11 @@
         
 <?php foreach ($books as $key => $book) {
     
-    if(isset($book->pictures->nb)) {
-        $nb = $book->pictures->nb;    
+    if(isset($book->pic_nb)) {
+        $nb = $book->pic_nb;    
     } else {
         $nb = 0;
     }
-    
-    //code($book);
        
     echo("<tr>
     <th><div id='book_name_$key'>");
@@ -43,7 +41,7 @@
     <div class="btn-group">
     <?php echo anchor("upload/index/$book->id","<i class='icon-camera'></i> Ajouter",'class="btn"'); ?>
     <?php echo anchor("book/edit/$book->id","<i class='icon-pencil'></i> Modifier",'class="btn "'); ?>
-    <?php echo anchor("book/view/$book->id/$book->private_key","<i class='icon-eye-open'></i> Voir",'target="_blank" class="btn "'); ?>
+    <?php echo anchor("book/view/$book->id","<i class='icon-eye-open'></i> Voir",'target="_blank" class="btn "'); ?>
     <?php echo anchor("book/del_book/$book->id","<i class='icon-trash icon-white'></i> Supprimer",'class="btn btn-danger confirm"'); ?>   
     </div>
     </td><td>

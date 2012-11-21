@@ -196,6 +196,11 @@ class Generic_user extends Users {
             $basic_info->profile = $user->profile;
             $basic_info->email = $user->email;
             
+            if($this->username == '') {
+                $this->username = $this->get_username();
+                $basic_info->username = $this->username;
+            }
+            
             return $basic_info;
         } else {
             return false;
@@ -211,22 +216,30 @@ class Generic_user extends Users {
      * @return object
      */
     function get_all_user_books($user_id) {
-            $q = $this->db
-                    ->where('user_id', $user_id)
-                    ->get('user_book');
-                    
-            if($q->num_rows() > 0) :
+        
+            
+            $q = $this->db->select('id')->from('user_book')->where('user_id', $user_id)->get();
+            if($q->num_rows() == 0) {
+                return null;
+            } else {
+                
+                $q = $this->db
+                ->select('user_book.id, user_book.name, user_book.description, user_book.short_url, 
+                occasions.occasion_name')
+                ->where('user_book.user_id', $user_id)
+                ->select('count(fj_book_pics.id) as pic_nb')
+                ->from('user_book')
+                ->join('book_pics','book_pics.book_id = user_book.id')
+                ->join('occasions','occasions.id = user_book.id_occasion')
+                ->get();                
+            
                 $this->load->model('books','book_model');
                 foreach ($q->result() as $key => $book) {
-                    //code($book);
-                    //$this->books[] = $this->book_model->get_book_by_id($book->id);
+                    
                     $this->books[] = $book;
+                    return $this->books;
                 }
-            else :
-                $this->books = null; 
-            endif;
-            
-            return $this->books;      
+            }     
     }
     
     
@@ -243,6 +256,60 @@ class Generic_user extends Users {
             return false;
         }
     }
+    
+    
+    
+    
+    /**
+     * Récupère le nom d'usage de l'utilisateur
+     * et le place en session
+     * @return string
+     */
+    function get_username() {
+        
+        if(isset($this->username)) {
+            
+            $this->session->set_userdata('username', $this->username);
+            return $this->username;
+            
+        } else {
+            
+            $q = $this->db->select('prenom, nom, user_data.username, users.email')
+            ->from('user_data')
+            ->join('users', 'users.id = user_data.user_id')
+            ->where('users.id', $this->user_id)
+            ->get();
+            
+            $result = $q->row();
+            
+            if($result->username != '') {
+                $this->username = $result->username;    
+                            
+            } elseif($result->prenom != '' || $result->nom != '') {                
+                $this->username = '';
+                
+                if($result->prenom != '') {                
+                    $this->username = $result->prenom .' ';
+                }
+                
+                if($result->nom != '') {
+                    $this->username .= $result->nom;
+                }
+                
+            } else {                
+                $decoup = explode('@',$result->email);
+                $this->username = $decoup[0];                 
+            }            
+            
+            $this->session->set_userdata('username', $this->username);
+            
+            //stop_code($this->session->userdata('username'));                        
+        }
+        
+        
+    }
+    
+    
     
     
     
@@ -279,7 +346,7 @@ class Generic_user extends Users {
             // on met l'utilisateur en session
             $this->session->set_userdata(array(
                     'user_id'   => $user_id,
-                    'username'  => '',
+                    'username'  => $this->get_username(),
                     'status'    => '1',
             )); 
             
@@ -421,6 +488,7 @@ class Generic_user extends Users {
      * 
      */
     function delete_user() {
+        
         $this->db->delete('users', array('id' => $this->user_id)); 
         $this->db->delete('user_profiles', array('user_id' => $this->user_id));
         $this->db->delete('user_autologin', array('user_id' => $this->user_id));
@@ -434,11 +502,11 @@ class Generic_user extends Users {
         $this->db->delete('user_data', array('user_id' => $this->user_id));
         $this->db->delete('comments',array('user_id' => $this->user_id));
         
-        $this->get_all_user_books($this->user_id);
+        $books = $this->get_all_user_books($this->user_id);
         
-        if(isset($this->books)) {
+        if(isset($books)) {
             $this->load->model('books','books_model');
-            foreach ($this->books as $key => $book) {           
+            foreach ($this->books as $key => $book) {
                 $this->books_model->delete($book->id);
             }              
         }  

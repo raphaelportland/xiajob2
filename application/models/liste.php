@@ -23,8 +23,8 @@ class Liste extends CI_Model {
      */
     function flowers($lang = 'fr') {
         
-        
-        $q = $this->db->select('latin, name_'.$lang)->get('fleurs');
+        $this->db->cache_on();
+        $q = $this->db->select('name_'.$lang)->get('fleurs');
         
         $result = $q->result();
         
@@ -36,13 +36,14 @@ class Liste extends CI_Model {
             
             $name = 'name_'.$lang;
             
-            $fleur_list .= '&quot;'.$fleur->$name . ' - ' . $fleur->latin . '&quot;'; 
-            //$fleur_list .= '&quot;'.$fleur->$name. '&quot;';
+            $fleur_list .= '&quot;'.$fleur->$name . '&quot;';
             
             if($key != $q->num_rows() - 1) :
                 $fleur_list .= ', ';
             endif; 
         }
+        
+        $this->db->cache_off();
         
         return $fleur_list;
        
